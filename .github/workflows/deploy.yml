@@ -10,25 +10,21 @@ on:
 # 하나의 workflow 1개 이상의 job 구성
 # 여러 job 기본적으로 병렬로 수행
 jobs:
-  My-Deploy-Job: # job 식별 위한 id
+  Deploy: # job 식별 위한 id
     runs-on: ubuntu-latest # ubuntu 환경 + 가장 최신 버전
-
     # step: 특정 작업을 수행하는 가장 작은 단위
     # job 여러 step 으로 구성
     steps:
-      - name: Hello World 찍기
-        run: echo "Hello World"
-
-      - name: 여러 명령어 문장 작성하기
-        run: |
-          echo "good "
-          echo "evening"
-
-      - name: Github Actions 에 저장되어있는 변수사용해보기
-        run: |
-          echo $GITHUB_SHA # 해당 commit 고유값
-          echo $GITHUB_REPOSITORY
-
-      - name: 노출시키고 싶지 않은 값
-        run:
-          echo ${{ secrets.SECRET_HOBBY }}
+      - name: SSH로 EC2에 원격 접속
+        uses: appleboy/ssh-action@v1.0.3 # 라이브러리 사용, 아래는 해당 라이브러리의 문법 (공식 문서 참조)
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            cd /home/ubuntu/github-actions-practice
+            git pull origin main
+            ./gradlew bootJar
+            sudo fuser -k -n tcp 8080 || true # 서버 없어서 에러 뜨면 true 
+            nohup java -jar build/libs/*SNAPSHOT.jar & > ./output.log 2>&1 &
