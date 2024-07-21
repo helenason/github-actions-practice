@@ -30,6 +30,6 @@ jobs:
             rm -rf src/main/resources/application.yml
             git pull origin main
             echo "$APPLICATION_PROPERTIES" > src/main/resources/application.yml # 해당 변수가 파일로 출력 -> 깃허브엔 없지만 EC2엔 생성
-            ./gradlew bootJar
+            ./gradlew clean build
             sudo fuser -k -n tcp 8080 || true # 서버 없어서 에러 뜨면 true 
             nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
