@@ -1,16 +1,12 @@
-# workflow 이름
 name: Github Actions 실행시키기
 
-# event: 실행 시점
 on:
   push:
     branches:
       - main
 
-# 하나의 workflow 1개 이상의 job 구성
-# 여러 job 기본적으로 병렬로 수행
 jobs:
-  Deploy: # job 식별 위한 id
+  Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: SSH로 EC2에 원격 접속
