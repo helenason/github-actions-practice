@@ -20,7 +20,6 @@ jobs:
           envs: APPLICATION_PROPERTIES
           script_stop: true
           script: |
-            mkdir -p /home/ubuntu/github-actions-practice 
             cd /home/ubuntu/github-actions-practice
             rm -rf src/main/resources/application.yml
             git pull origin main
