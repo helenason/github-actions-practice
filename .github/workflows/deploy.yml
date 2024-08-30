@@ -36,11 +36,5 @@ jobs:
             chmod 400 ${{ secrets.EC2_KEY_PATH }}
             ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
               cd /home/ubuntu/github-actions-practice
-              rm -rf src/main/resources/application.yml
-              git pull origin main
-              echo "$APPLICATION_PROPERTIES" > src/main/resources/application.yml
-              ./gradlew clean build
-              sudo fuser -k -n tcp 8080 || true
-              nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
             EOF
             rm -f ${{ secrets.EC2_KEY_PATH }}
