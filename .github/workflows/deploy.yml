@@ -32,6 +32,7 @@ jobs:
           env:
             APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
           run: |
+            chmod 400 ${{ secrets.EC2_KEY_PATH }}
             ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
               cd /home/ubuntu/github-actions-practice
               rm -rf src/main/resources/application.yml
