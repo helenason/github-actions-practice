@@ -30,4 +30,4 @@ jobs:
 #            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
       - name: SSH로 EC2에 원격 접속 (without appleboy)
         run: |
-          ssh -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}
+          ssh -t -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}
