@@ -7,8 +7,8 @@ on:
 
 jobs:
   Deploy:
-#    runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+#    runs-on: self-hosted
     steps:
 #      - name: SSH로 EC2에 원격 접속
 #        uses: appleboy/ssh-action@v1.0.3
