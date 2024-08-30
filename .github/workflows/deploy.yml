@@ -32,6 +32,7 @@ jobs:
           env:
             APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
           run: |
+            echo "${{ secrets.EC2_PRIVATE_KEY }}" > ${{ secrets.EC2_KEY_PATH }}
             chmod 400 ${{ secrets.EC2_KEY_PATH }}
             ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
               cd /home/ubuntu/github-actions-practice
@@ -42,4 +43,4 @@ jobs:
               sudo fuser -k -n tcp 8080 || true
               nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
             EOF
-
+            rm -f ${{ secrets.EC2_KEY_PATH }}
