@@ -15,8 +15,7 @@ jobs:
           rm -rf ${{ secrets.EC2_KEY_PATH }}
           echo "${{ secrets.EC2_PRIVATE_KEY }}" > ${{ secrets.EC2_KEY_PATH }}
           chmod 400 ${{ secrets.EC2_KEY_PATH }}
-          ssh-keygen -R ${{ secrets.EC2_HOST }}
-          ssh -t -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
             cd /home/ubuntu/github-actions-practice
             git pull origin main
           EOF
