@@ -28,7 +28,16 @@ jobs:
 #            ./gradlew clean build
 #            sudo fuser -k -n tcp 8080 || true # 서버 없어서 에러 뜨면 true
 #            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
-      - name: SSH로 EC2에 원격 접속 (without appleboy)
-        run: |
-          chmod 400 ${{ secrets.EC2_KEY_PATH }}
-          ssh -t -i ${{ secrets.EC2_KEY_PATH }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}
+        - name: SSH로 EC2에 원격 접속 (applyboy 없이)
+          env:
+            APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
+          run: |
+            ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_PRIVATE_KEY }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
+              cd /home/ubuntu/github-actions-practice
+              rm -rf src/main/resources/application.yml
+              git pull origin main
+              echo "$APPLICATION_PROPERTIES" > src/main/resources/application.yml
+              ./gradlew clean build
+              sudo fuser -k -n tcp 8080 || true
+              nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
+            EOF
